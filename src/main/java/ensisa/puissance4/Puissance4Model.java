@@ -9,7 +9,7 @@ public class Puissance4Model {
     public int[][] getGrid() {
         return grid;
     }
-    public int player = 1;
+    //public int player = 1;
 
     private byte turn = 0;
     public byte getTurn() {
@@ -31,7 +31,7 @@ public class Puissance4Model {
         }
     }
 
-    public int makeMove(int column) {
+    public int makeMove(int column, int player) {
         for (int row = 0; row < 6; row++) {
             if (grid[column][row] == 0) {
                 grid[column][row] = player;
@@ -40,6 +40,15 @@ public class Puissance4Model {
             }
         }
         return -1; // move not allowed
+    }
+
+    public void undoMove(int column) {
+        for (int row = 5; row >= 0; row--) {
+            if (grid[column][row] != 0) {
+                grid[column][row] = 0;
+                return;
+            }
+        }
     }
 
     public List<Integer> getPossibleMoves(int[][] gridEvaluate){
