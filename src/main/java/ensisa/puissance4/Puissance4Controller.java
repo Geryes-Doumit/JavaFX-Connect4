@@ -13,7 +13,7 @@ import javafx.scene.shape.Circle;
 public class Puissance4Controller {
 
     private Puissance4Model model = new Puissance4Model();
-    private boolean playing = true;
+    private boolean playing = false;
     private boolean againstAI = true;
 
     private int player = 1;
@@ -125,7 +125,20 @@ public class Puissance4Controller {
     private void newGameButtonClicked() {
         model.initialiseGrid();
         grid.getChildren().clear();
+        player = selectPlayer();
+
+        playing = true;
         initalizeView();
+
+        System.out.println("Player " + player + " starts");
+
+        if (player == 2 && againstAI) {
+            AITurn();
+        }
+    }
+
+    private int selectPlayer() {
+        return (int)(Math.random() * 2) + 1;
     }
 
     public void checkGameStatus() {
