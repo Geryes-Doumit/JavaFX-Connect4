@@ -35,7 +35,7 @@ public class Puissance4Model {
         for (int row = 0; row < 6; row++) {
             if (grid[column][row] == 0) {
                 grid[column][row] = player;
-                player = player % 2 + 1;
+                //player = player % 2 + 1;
                 return 1; // move successful
             }
         }
@@ -80,6 +80,6 @@ public class Puissance4Model {
             }
         }
 
-        return -1;
+        return 0;
     }
 }
