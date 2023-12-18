@@ -1,0 +1,11 @@
+.button-modern {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px; /* Font size */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Rounded corners */
+}
+
+.button-modern:hover {
+    -fx-background-color: #45a049; /* Darker shade of green on hover */
+}

@@ -10,10 +10,10 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensisa.puissance4.Puissance4Controller">
    <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ButtonBar prefHeight="57.0" prefWidth="600.0" style="-fx-background-color: #54525c;" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" onAction="#newGameButtonClicked" text="New Game" ButtonBar.buttonData="LEFT" />
-          <Button mnemonicParsing="false" text="Quit" />
+          <Button mnemonicParsing="false" onAction="#newGameButtonClicked" styleClass="button-modern" stylesheets="@ModernButtonStyle.css" text="New Game" ButtonBar.buttonData="LEFT" />
+          <Button mnemonicParsing="false" styleClass="button-modern" stylesheets="@ModernButtonStyle.css" text="Quit" />
         </buttons>
          <padding>
             <Insets left="100.0" right="100.0" />
@@ -21,7 +21,7 @@
       </ButtonBar>
    </bottom>
    <center>
-      <GridPane fx:id="grid" alignment="CENTER" style="-fx-background-color: blue;" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" alignment="CENTER" style="-fx-background-color: #54525c;" BorderPane.alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

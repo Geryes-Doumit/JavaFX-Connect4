@@ -11,7 +11,7 @@ public class Puissance4App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Puissance4App.class.getResource("Connect4View.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 700, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 650);
         stage.setTitle("Puissance 4");
         stage.setScene(scene);
         stage.show();
