@@ -130,8 +130,6 @@ public class Puissance4Controller {
         playing = true;
         initalizeView();
 
-        System.out.println("Player " + player + " starts");
-
         if (player == 2 && againstAI) {
             AITurn();
         }
