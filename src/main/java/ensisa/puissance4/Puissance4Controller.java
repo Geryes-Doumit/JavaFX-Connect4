@@ -2,8 +2,11 @@ package ensisa.puissance4;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -17,7 +20,7 @@ public class Puissance4Controller {
 
     @FXML
     private GridPane grid;
-        private Circle[][] circles = new Circle[7][6];
+    private Circle[][] circles = new Circle[7][6];
 
     
     public void humanTurn(int column) {
@@ -68,28 +71,48 @@ public class Puissance4Controller {
         double gridWidth = cols * (2 * radius + spacing);
         double gridHeight = rows * (2 * radius + spacing);
 
-        double startX = (720 - gridWidth) / 2 + radius;
-        double startY = (620 - gridHeight) / 2 + radius + buttonHeight + 10; 
-
+        double startX = (800 - gridWidth) / 2 + radius;
+        double startY = (700 - gridHeight) / 2 + radius + buttonHeight + 10; 
         
+        
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (i == 0) {
                     Button button = new Button();
-                    button.setPrefHeight(buttonHeight);
-                    button.setPrefWidth(2 * radius + spacing);
+                    button.setPrefHeight(buttonHeight - 15);
+                    button.setPrefWidth(2 * radius + spacing - 15);
                     button.setText("Col " + j);
                     final int column = j;
                     button.setOnAction(e -> humanTurn(column));
+                    // set Halignment and Valignment
+                    GridPane.setHalignment(button, javafx.geometry.HPos.CENTER);
+                    GridPane.setValignment(button, javafx.geometry.VPos.CENTER);
+                    
+                    // getting and applying css
+                    grid.getStylesheets().add(getClass().getResource("DropTokenButton.css").toExternalForm());
+                    button.getStyleClass().add("drop-token-button");
+
                     grid.add(button, j, i);
                 }
-                Circle circle = new Circle(radius, Color.WHITE);
-                double centerX = startX + (j * (2 * radius + spacing));
-                double centerY = startY + (i * (2 * radius + spacing));
-                circle.setCenterX(centerX);
-                circle.setCenterY(centerY);
-                grid.getChildren().add(circle);
-                circles[j][i] = circle;
+                else {
+                    Circle circle = new Circle(radius, Color.WHITE);
+                    double centerX = startX + (j * (2 * radius + spacing));
+                    double centerY = startY + (i * (2 * radius + spacing));
+                    System.out.println("centerX: " + centerX + ", centerY: " + centerY);
+                    circle.setCenterX(centerX);
+                    circle.setCenterY(centerY);
+
+                    // set Halignment and Valignment
+                    GridPane.setHalignment(circle, javafx.geometry.HPos.CENTER);
+                    GridPane.setValignment(circle, javafx.geometry.VPos.CENTER);
+
+                    // translate circle down by radius
+                    circle.setTranslateY(radius);
+
+                    grid.add(circle, j, i);
+                    circles[j][i] = circle;
+                }
             }
         }
     }
