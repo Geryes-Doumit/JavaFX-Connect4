@@ -9,6 +9,10 @@ import javafx.scene.shape.Circle;
 public class Puissance4Controller {
 
     private Puissance4Model model = new Puissance4Model();
+    private boolean playing = true;
+    private boolean againstAI = true;
+
+    private Puissance4IA IA = new Puissance4IA();
 
     @FXML
     private GridPane grid;
@@ -37,54 +41,75 @@ public class Puissance4Controller {
 
     @FXML
     private void button0Clicked() {
-        buttonClicked(0);
+        humanTurn(0);
     }
 
     @FXML
     private void button1Clicked() {
-        buttonClicked(1);
+        humanTurn(1);
     }
 
     @FXML
     private void button2Clicked() {
-        buttonClicked(2);
+        humanTurn(2);
     }
 
     @FXML
     private void button3Clicked() {
-        buttonClicked(3);
+        humanTurn(3);
     }
 
     @FXML
     private void button4Clicked() {
-        buttonClicked(4);
+        humanTurn(4);
     }
 
     @FXML
     private void button5Clicked() {
-        buttonClicked(5);
+        humanTurn(5);
     }
 
     @FXML
     private void button6Clicked() {
-        buttonClicked(6);
+        humanTurn(6);
     }
 
-    public void buttonClicked(int column) {
+    public void humanTurn(int column) {
+        if(playing){
+            model.makeMove(column);
+
+            printGrid();
+
+            // updateView();
+            checkGameStatus();
+            if (!playing){
+                return;
+            }
+
+            model.setTurn((byte)(model.getTurn() + 1));
+            model.player = model.player % 2 + 1;
+
+            if(againstAI)
+            {
+                AITurn();
+            }
+        }
+    }
+
+    public void AITurn() {
+        int column = IA.AIMove(model, model.player, (byte)6, model.getTurn());
         model.makeMove(column);
 
-        // print grid for debugging
-        int[][] modelGrid = model.getGrid();
-        for (int i = 0; i<6; i++){
-            System.out.print("|");
-            for (int j = 0; j<7; j++){
-                System.out.print(modelGrid[j][5-i] + "|" );
-            }
-            System.out.println();
-        }
-        System.out.println("-------");
+        printGrid();
 
         // updateView();
+        checkGameStatus();
+        if (!playing){
+            return;
+        }
+
+        model.setTurn((byte)(model.getTurn() + 1));
+        model.player = model.player % 2 + 1;
     }
 
     public void updateView() {
@@ -110,5 +135,28 @@ public class Puissance4Controller {
                 }
             }
         }
+    }
+
+    public void checkGameStatus() {
+        if(model.checkVictory(model.getGrid()) != 0){
+            System.out.println("Player " + model.checkVictory(model.getGrid()) + " won!");
+            playing = false;
+        }
+        else if(model.getTurn() == 42){
+            System.out.println("Draw!");
+            playing = false;
+        }
+    }
+
+    public void printGrid(){
+        int[][] modelGrid = model.getGrid();
+        for (int i = 0; i<6; i++){
+            System.out.print("|");
+            for (int j = 0; j<7; j++){
+                System.out.print(modelGrid[j][5-i] + "|" );
+            }
+            System.out.println();
+        }
+        System.out.println("-------");
     }
 }
