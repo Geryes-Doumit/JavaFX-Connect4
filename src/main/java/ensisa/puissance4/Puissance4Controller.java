@@ -71,7 +71,7 @@ public class Puissance4Controller {
     }
 
     public void buttonClicked(int column) {
-        model.makeMove(column, model.player);
+        model.makeMove(column);
 
         // print grid for debugging
         int[][] modelGrid = model.getGrid();
@@ -83,7 +83,7 @@ public class Puissance4Controller {
             System.out.println();
         }
 
-        updateView();
+        // updateView();
     }
 
     public void updateView() {

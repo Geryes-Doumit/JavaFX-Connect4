@@ -27,10 +27,10 @@ public class Puissance4Model {
         }
     }
 
-    public int makeMove(int column, int player) {
-        for (int row = 6; row >= 0; row--) {
-            if (grid[row][column] == 0) {
-                grid[row][column] = player;
+    public int makeMove(int column) {
+        for (int row = 0; row < 6; row++) {
+            if (grid[column][row] == 0) {
+                grid[column][row] = player;
                 player = player % 2 + 1;
                 return 1; // move successful
             }
