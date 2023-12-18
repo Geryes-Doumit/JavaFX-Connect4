@@ -16,6 +16,8 @@ public class Puissance4Controller {
     private boolean playing = true;
     private boolean againstAI = true;
 
+    private int player = 1;
+
     private Puissance4IA IA = new Puissance4IA();
 
     @FXML
@@ -25,7 +27,7 @@ public class Puissance4Controller {
     
     public void humanTurn(int column) {
         if(playing){
-            model.makeMove(column);
+            model.makeMove(column, player);
 
             printGrid();
 
@@ -36,7 +38,7 @@ public class Puissance4Controller {
             }
 
             model.setTurn((byte)(model.getTurn() + 1));
-            model.player = model.player % 2 + 1;
+            player = player % 2 + 1;
 
             if(againstAI)
             {
@@ -46,8 +48,8 @@ public class Puissance4Controller {
     }
 
     public void AITurn() {
-        int column = IA.AIMove(model, model.player, (byte)6, model.getTurn());
-        model.makeMove(column);
+        int column = IA.AIMove(model, player, (byte)6, model.getTurn());
+        model.makeMove(column, player);
 
         printGrid();
 
@@ -58,7 +60,7 @@ public class Puissance4Controller {
         }
 
         model.setTurn((byte)(model.getTurn() + 1));
-        model.player = model.player % 2 + 1;
+        player = player % 2 + 1;
     }
 
     public void initalizeView() {
