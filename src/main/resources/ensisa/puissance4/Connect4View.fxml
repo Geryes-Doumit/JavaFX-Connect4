@@ -13,7 +13,7 @@
       <ButtonBar prefHeight="57.0" prefWidth="600.0" style="-fx-background-color: #54525c;" BorderPane.alignment="CENTER">
         <buttons>
           <Button mnemonicParsing="false" onAction="#newGameButtonClicked" styleClass="button-modern" stylesheets="@ModernButtonStyle.css" text="New Game" ButtonBar.buttonData="LEFT" />
-          <Button mnemonicParsing="false" styleClass="button-modern" stylesheets="@ModernButtonStyle.css" text="Quit" />
+          <Button mnemonicParsing="false" onAction="#closeWindow" styleClass="button-modern" stylesheets="@ModernButtonStyle.css" text="Quit" />
         </buttons>
          <padding>
             <Insets left="100.0" right="100.0" />

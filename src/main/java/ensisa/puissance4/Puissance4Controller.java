@@ -14,7 +14,7 @@ public class Puissance4Controller {
 
     private Puissance4Model model = new Puissance4Model();
     private boolean playing = false;
-    private boolean againstAI = true;
+    private boolean againstAI = false;
 
     private int player = 1;
 
@@ -126,6 +126,7 @@ public class Puissance4Controller {
         model.initialiseGrid();
         grid.getChildren().clear();
         player = selectPlayer();
+        model.setTurn((byte)0);
 
         playing = true;
         initalizeView();
@@ -133,6 +134,11 @@ public class Puissance4Controller {
         if (player == 2 && againstAI) {
             AITurn();
         }
+    }
+
+    @FXML
+    private void closeWindow() {
+        Platform.exit();
     }
 
     private int selectPlayer() {
@@ -144,7 +150,7 @@ public class Puissance4Controller {
             System.out.println("Player " + model.checkVictory(model.getGrid()) + " won!");
             playing = false;
         }
-        else if(model.getTurn() == 42){
+        else if(model.getTurn() >= 41){
             System.out.println("Draw!");
             playing = false;
         }
