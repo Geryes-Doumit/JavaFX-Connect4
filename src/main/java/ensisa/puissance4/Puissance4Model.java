@@ -21,6 +21,10 @@ public class Puissance4Model {
 
 
     public Puissance4Model() {
+        initialiseGrid();
+    }
+
+    public void initialiseGrid() {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 6; j++)
                 grid[i][j] = 0;

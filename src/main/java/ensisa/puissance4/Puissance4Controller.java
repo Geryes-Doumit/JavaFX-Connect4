@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Puissance4Controller {
@@ -12,65 +13,10 @@ public class Puissance4Controller {
 
     @FXML
     private GridPane grid;
-    
-    // button 0 to 6
-    @FXML
-    private Button button0;
+    private Circle[][] circles = new Circle[7][6];
 
-    @FXML
-    private Button button1;
 
-    @FXML
-    private Button button2;
-
-    @FXML
-    private Button button3;
-
-    @FXML
-    private Button button4;
-
-    @FXML
-    private Button button5;
-
-    @FXML
-    private Button button6;
-
-    @FXML
-    private void button0Clicked() {
-        buttonClicked(0);
-    }
-
-    @FXML
-    private void button1Clicked() {
-        buttonClicked(1);
-    }
-
-    @FXML
-    private void button2Clicked() {
-        buttonClicked(2);
-    }
-
-    @FXML
-    private void button3Clicked() {
-        buttonClicked(3);
-    }
-
-    @FXML
-    private void button4Clicked() {
-        buttonClicked(4);
-    }
-
-    @FXML
-    private void button5Clicked() {
-        buttonClicked(5);
-    }
-
-    @FXML
-    private void button6Clicked() {
-        buttonClicked(6);
-    }
-
-    public void buttonClicked(int column) {
+    public void humanTurn(int column) {
         model.makeMove(column);
 
         // print grid for debugging
@@ -87,28 +33,53 @@ public class Puissance4Controller {
         // updateView();
     }
 
-    public void updateView() {
-        int[][] modelGrid = model.getGrid();
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                switch (modelGrid[i][j]) {
-                    case 0:
-                        break;
-                        
-                    case 1:
-                        Circle circle = new Circle(40);
-                        circle.setStyle("-fx-fill: red");
-                        break;
-                    
-                    case 2:
-                        Circle circle2 = new Circle(40);
-                        circle2.setStyle("-fx-fill: yellow");
-                        break;
+    public void initalizeView() {
+        final int rows = 6;
+        final int cols = 7;
+        final double radius = 40.0;
+        final double spacing = 20.0;
+        final double buttonHeight = 2 * radius;
 
-                    default:
-                        break;
+        double gridWidth = cols * (2 * radius + spacing);
+        double gridHeight = rows * (2 * radius + spacing);
+
+        double startX = (720 - gridWidth) / 2 + radius;
+        double startY = (620 - gridHeight) / 2 + radius + buttonHeight + 10; 
+
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (i == 0) {
+                    Button button = new Button();
+                    button.setPrefHeight(buttonHeight);
+                    button.setPrefWidth(2 * radius + spacing);
+                    button.setText("Col " + j);
+                    final int column = j;
+                    button.setOnAction(e -> humanTurn(column));
+                    grid.add(button, j, i);
                 }
+                Circle circle = new Circle(radius, Color.WHITE);
+                double centerX = startX + (j * (2 * radius + spacing));
+                double centerY = startY + (i * (2 * radius + spacing));
+                circle.setCenterX(centerX);
+                circle.setCenterY(centerY);
+                grid.getChildren().add(circle);
+                circles[j][i] = circle;
             }
         }
+    }
+
+    @FXML
+    private Button newGameButton;
+
+    @FXML
+    private void newGameButtonClicked() {
+        model.initialiseGrid();
+        if (grid == null) {
+            System.out.println("grid is null");
+            return;
+        }
+        grid.getChildren().clear();
+        initalizeView();
     }
 }
