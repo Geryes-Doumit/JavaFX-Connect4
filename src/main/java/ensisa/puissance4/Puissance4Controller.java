@@ -27,11 +27,16 @@ public class Puissance4Controller {
     
     public void humanTurn(int column) {
         if(playing){
-            model.makeMove(column, player);
+            int move = model.makeMove(column, player);
+
+            if (move == -1) {
+                System.out.println("Move not allowed");
+                return;
+            }
 
             printGrid();
 
-            // updateView();
+            updateView();
             checkGameStatus();
             if (!playing){
                 return;
@@ -53,7 +58,7 @@ public class Puissance4Controller {
 
         printGrid();
 
-        // updateView();
+        updateView();
         checkGameStatus();
         if (!playing){
             return;
@@ -75,10 +80,8 @@ public class Puissance4Controller {
 
         double startX = (800 - gridWidth) / 2 + radius;
         double startY = (700 - gridHeight) / 2 + radius + buttonHeight + 10; 
-        
-        
 
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows + 1; i++) {
             for (int j = 0; j < cols; j++) {
                 if (i == 0) {
                     Button button = new Button();
@@ -101,7 +104,6 @@ public class Puissance4Controller {
                     Circle circle = new Circle(radius, Color.WHITE);
                     double centerX = startX + (j * (2 * radius + spacing));
                     double centerY = startY + (i * (2 * radius + spacing));
-                    System.out.println("centerX: " + centerX + ", centerY: " + centerY);
                     circle.setCenterX(centerX);
                     circle.setCenterY(centerY);
 
@@ -109,11 +111,8 @@ public class Puissance4Controller {
                     GridPane.setHalignment(circle, javafx.geometry.HPos.CENTER);
                     GridPane.setValignment(circle, javafx.geometry.VPos.CENTER);
 
-                    // translate circle down by radius
-                    circle.setTranslateY(radius);
-
                     grid.add(circle, j, i);
-                    circles[j][i] = circle;
+                    circles[j][i-1] = circle;
                 }
             }
         }
@@ -125,10 +124,6 @@ public class Puissance4Controller {
     @FXML
     private void newGameButtonClicked() {
         model.initialiseGrid();
-        if (grid == null) {
-            System.out.println("grid is null");
-            return;
-        }
         grid.getChildren().clear();
         initalizeView();
     }
@@ -154,5 +149,19 @@ public class Puissance4Controller {
             System.out.println();
         }
         System.out.println("-------");
+    }
+
+    public void updateView() {
+        int[][] modelGrid = model.getGrid();
+        for (int i = 0; i<6; i++){
+            for (int j = 0; j<7; j++){
+                if(modelGrid[j][i] == 1){
+                    circles[j][5-i].setFill(Color.RED);
+                }
+                else if(modelGrid[j][i] == 2){
+                    circles[j][5-i].setFill(Color.YELLOW);
+                }
+            }
+        }
     }
 }
