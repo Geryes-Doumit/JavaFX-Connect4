@@ -1,0 +1,13 @@
+.drop-token-button {
+    -fx-background-color: #FFA500; /* Orange background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 14px; /* Font size */
+    -fx-border-radius: 30px; /* Circular border */
+    -fx-background-radius: 30px; /* Circular background */
+    -fx-margin: 5px; /* Margin between buttons */
+}
+
+.drop-token-button:hover {
+    -fx-background-color: #FF8C00; /* Darker shade of orange on hover */
+    -fx-cursor: hand; /* Hand cursor on hover */
+}
