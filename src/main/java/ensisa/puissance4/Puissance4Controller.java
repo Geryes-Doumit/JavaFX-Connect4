@@ -127,7 +127,6 @@ public class Puissance4Controller {
         GridPane.setHalignment(circle, javafx.geometry.HPos.CENTER);
         GridPane.setValignment(circle, javafx.geometry.VPos.CENTER);
 
-
         grid.getChildren().add(circle);
 
         TranslateTransition transition = new TranslateTransition();
