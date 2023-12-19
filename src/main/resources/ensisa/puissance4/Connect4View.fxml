@@ -16,7 +16,7 @@
    <bottom>
       <ButtonBar prefHeight="57.0" prefWidth="600.0" style="-fx-background-color: #54525c;" BorderPane.alignment="CENTER">
         <buttons>
-            <Label fx:id="label" alignment="CENTER" prefHeight="35.0" prefWidth="342.0" text="Player vs Player selected." textFill="WHITE" translateX="-10.0">
+            <Label fx:id="label" alignment="CENTER" prefHeight="35.0" prefWidth="342.0" text="Player vs Player." textFill="WHITE" translateX="-10.0">
                <font>
                   <Font size="16.0" />
                </font>
