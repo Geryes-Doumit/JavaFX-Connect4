@@ -1,13 +1,12 @@
 .drop-token-button {
-    -fx-background-color: #FFA500; /* Orange background */
-    -fx-text-fill: white; /* White text */
-    -fx-font-size: 14px; /* Font size */
-    -fx-border-radius: 30px; /* Circular border */
-    -fx-background-radius: 30px; /* Circular background */
-    -fx-margin: 5px; /* Margin between buttons */
+    -fx-background-color: #64bb88;
+    -fx-font-size: 14px;
+    -fx-border-radius: 30px;
+    -fx-background-radius: 30px;
+    -fx-margin: 5px;
 }
 
 .drop-token-button:hover {
-    -fx-background-color: #FF8C00; /* Darker shade of orange on hover */
-    -fx-cursor: hand; /* Hand cursor on hover */
+    -fx-background-color: #539b71;
+    -fx-cursor: hand;
 }

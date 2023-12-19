@@ -1,11 +1,13 @@
 .button-modern {
-    -fx-background-color: #4CAF50; /* Green background */
-    -fx-text-fill: white; /* White text */
-    -fx-font-size: 16px; /* Font size */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-background-radius: 5px; /* Rounded corners */
+    -fx-background-color: #64bb88;
+    -fx-text-fill: white;
+    -fx-fill: white;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 .button-modern:hover {
-    -fx-background-color: #45a049; /* Darker shade of green on hover */
+    -fx-background-color: #539b71;
+    -fx-cursor: hand;
 }
