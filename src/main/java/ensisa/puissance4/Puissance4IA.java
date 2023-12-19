@@ -3,7 +3,6 @@ package ensisa.puissance4;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class Puissance4IA {
     public Puissance4Model model;
@@ -17,26 +16,45 @@ public class Puissance4IA {
         return possibleMoves.get(random.nextInt(possibleMoves.size()));*/
 
         int bestMove = possibleMoves.get(0);
-        int bestScore = -100000000;
-        int alpha = -100000000;
-        int beta = 100000000;
+        int bestScore = Integer.MIN_VALUE;
+
 
         for (int move : possibleMoves){
             model.makeMove(move, player);
-            int score = AlphaBetaMin(player % 2 + 1, (byte)(depth - 1), alpha, beta, turn);
+            int score = Min(player, (byte)(depth - 1), turn);
             model.undoMove(move);
-            if (score > bestScore){
+            if (bestScore < score){
                 bestScore = score;
                 bestMove = move;
             }
-            alpha = (byte)Math.max(alpha, score);
         }
         return bestMove;
 
 
     }
 
-    public int AlphaBetaMin(int player, byte depth, int alpha, int beta, byte turn){
+    public int Min(int player, byte depth, byte turn){
+        int[][] grid = model.getGrid();
+        if (depth == 0 || model.checkVictory(grid) != 0 || turn >= 41){
+            return evaluate(grid, player);
+        }
+
+        List<Integer> possibleMoves = model.getPossibleMoves(grid);
+        turn = (byte)(turn + 1);
+        int bestScore = Integer.MAX_VALUE;
+        int opponent = player % 2 + 1;
+        for (int move : possibleMoves){
+            model.makeMove(move, opponent);
+            int score = Max(player, (byte)(depth - 1), turn);
+            model.undoMove(move);
+            if (bestScore >= score){
+                bestScore = score;
+            }
+        }
+        return bestScore;
+    }
+
+    public int Max(int player, byte depth, byte turn){
         int[][] grid = model.getGrid();
         if (depth == 0 || model.checkVictory(grid) != 0 || turn == 42){
             return evaluate(grid, player);
@@ -44,50 +62,30 @@ public class Puissance4IA {
 
         List<Integer> possibleMoves = model.getPossibleMoves(grid);
         turn = (byte)(turn + 1);
+        int bestScore = Integer.MIN_VALUE;
         for (int move : possibleMoves){
             model.makeMove(move, player);
-            int score = AlphaBetaMax(player % 2 + 1, (byte)(depth - 1), alpha, beta, turn);
+            int score = Min(player, (byte)(depth - 1), turn);
             model.undoMove(move);
-            beta = (byte)Math.min(beta, score);
-            if (beta <= alpha){
-                return beta;
+            if (score >= bestScore){
+                bestScore = score;
             }
         }
-        return beta;
+        return bestScore;
     }
 
-    public int AlphaBetaMax(int player, byte depth, int alpha, int beta, byte turn){
-        int[][] grid = model.getGrid();
-        if (depth == 0 || model.checkVictory(grid) != 0 || turn == 42){
-            return evaluate(grid, player);
-        }
-
-        List<Integer> possibleMoves = model.getPossibleMoves(grid);
-        turn = (byte)(turn + 1);
-        for (int move : possibleMoves){
-            model.makeMove(move, player);
-            int score = AlphaBetaMin(player, (byte)(depth - 1), alpha, beta, turn);
-            model.undoMove(move);
-            alpha = (byte)Math.max(alpha, score);
-            if (beta <= alpha){
-                return alpha;
-            }
-        }
-        return alpha;
-    }
-    
     public int evaluate(int[][] grid, int player){
         int score = 0;
         int opponent = player % 2 + 1;
         int victory = model.checkVictory(grid);
         if (victory == player){
-            score = 1000000;
+            return 100000;
         } else if (victory == opponent){
-            score = -50000;
+            return -100000;
         }
 
-        score += checkForThreat(player) * 10;
-        score -= checkForThreat(opponent) * 5;
+        score += checkForThreat(player);
+        score -= checkForThreat(opponent);
 
         return score;
     }

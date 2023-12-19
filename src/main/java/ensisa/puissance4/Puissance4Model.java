@@ -10,6 +10,11 @@ public class Puissance4Model {
         return grid;
     }
 
+    private int[][] winningTokens = new int[4][2];
+    public int[][] getWinningTokens() {
+        return winningTokens;
+    }
+
     private byte turn = 0;
     public byte getTurn() {
         return turn;
@@ -65,6 +70,14 @@ public class Puissance4Model {
         for (int line = 0; line <6; line++){
             for (int column_shift = 0; column_shift<4; column_shift ++){
                 if(gridEvaluate[column_shift][line] != 0 && gridEvaluate[column_shift][line] == gridEvaluate[column_shift + 1][line] && gridEvaluate[column_shift][line] == gridEvaluate[column_shift + 2][line] && gridEvaluate[column_shift][line] == gridEvaluate[column_shift + 3][line]){
+                    winningTokens[0][0] = column_shift;
+                    winningTokens[0][1] = line;
+                    winningTokens[1][0] = column_shift + 1;
+                    winningTokens[1][1] = line;
+                    winningTokens[2][0] = column_shift + 2;
+                    winningTokens[2][1] = line;
+                    winningTokens[3][0] = column_shift + 3;
+                    winningTokens[3][1] = line;
                     return gridEvaluate[column_shift][line];
                 }
             }
@@ -73,6 +86,14 @@ public class Puissance4Model {
         for (int column = 0; column <7; column++){
             for (int line_shift = 0; line_shift<3; line_shift ++){
                 if(gridEvaluate[column][line_shift] != 0 && gridEvaluate[column][line_shift] == gridEvaluate[column][line_shift + 1] && gridEvaluate[column][line_shift] == gridEvaluate[column][line_shift + 2] && gridEvaluate[column][line_shift] == gridEvaluate[column][line_shift + 3]){
+                    winningTokens[0][0] = column;
+                    winningTokens[0][1] = line_shift;
+                    winningTokens[1][0] = column;
+                    winningTokens[1][1] = line_shift + 1;
+                    winningTokens[2][0] = column;
+                    winningTokens[2][1] = line_shift + 2;
+                    winningTokens[3][0] = column;
+                    winningTokens[3][1] = line_shift + 3;
                     return gridEvaluate[column][line_shift];
                 }
             }
@@ -81,8 +102,24 @@ public class Puissance4Model {
         for (int column_shift = 0; column_shift<4; column_shift++){
             for (int line_shift = 0; line_shift<3; line_shift++){
                 if (gridEvaluate[column_shift][line_shift] != 0 && gridEvaluate[column_shift][line_shift] == gridEvaluate[column_shift+1][line_shift+1] && gridEvaluate[column_shift][line_shift] == gridEvaluate[column_shift+2][line_shift+2] && gridEvaluate[column_shift][line_shift] == gridEvaluate[column_shift+3][line_shift+3]){
+                    winningTokens[0][0] = column_shift;
+                    winningTokens[0][1] = line_shift;
+                    winningTokens[1][0] = column_shift + 1;
+                    winningTokens[1][1] = line_shift + 1;
+                    winningTokens[2][0] = column_shift + 2;
+                    winningTokens[2][1] = line_shift + 2;
+                    winningTokens[3][0] = column_shift + 3;
+                    winningTokens[3][1] = line_shift + 3;
                     return gridEvaluate[column_shift][line_shift];
                 } else if (gridEvaluate[column_shift][5 - line_shift] != 0 && gridEvaluate[column_shift][5 - line_shift] == gridEvaluate[column_shift+1][4 - line_shift] && gridEvaluate[column_shift][5 - line_shift] == gridEvaluate[column_shift+2][3 - line_shift] && gridEvaluate[column_shift][5 - line_shift] == gridEvaluate[column_shift+3][2 - line_shift]) {
+                    winningTokens[0][0] = column_shift;
+                    winningTokens[0][1] = 5 - line_shift;
+                    winningTokens[1][0] = column_shift + 1;
+                    winningTokens[1][1] = 4 - line_shift;
+                    winningTokens[2][0] = column_shift + 2;
+                    winningTokens[2][1] = 3 - line_shift;
+                    winningTokens[3][0] = column_shift + 3;
+                    winningTokens[3][1] = 2 - line_shift;
                     return gridEvaluate[column_shift][5 - line_shift];
                 }
             }

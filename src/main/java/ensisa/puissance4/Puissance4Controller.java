@@ -279,6 +279,7 @@ public class Puissance4Controller {
 
     public void checkGameStatus() {
         if(model.checkVictory(model.getGrid()) != 0){
+            strokeWinningTokens();
             // System.out.println("Player " + model.checkVictory(model.getGrid()) + " won!");
             if (!againstAI)
                 updateLabel("Player " + model.checkVictory(model.getGrid()) + " wins!", true);
@@ -321,6 +322,14 @@ public class Puissance4Controller {
                     circles[j][5-i].setFill(yellowColor);
                 }
             }
+        }
+    }
+
+    public void strokeWinningTokens(){
+        int[][] winningTokens = model.getWinningTokens();
+        for (int i = 0; i<4; i++){
+            circles[winningTokens[i][0]][5 - winningTokens[i][1]].setStroke(Color.web("#768bad"));
+            circles[winningTokens[i][0]][5 - winningTokens[i][1]].setStrokeWidth(4);
         }
     }
 }
