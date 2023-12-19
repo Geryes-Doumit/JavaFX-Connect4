@@ -6,6 +6,15 @@ import java.util.List;
 
 public class Puissance4IA {
     public Puissance4Model model;
+
+    /**
+     * Alphabeta algorithm for the AI
+     * @param model
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
     public int AIMove(Puissance4Model model, int player, byte depth, byte turn){
         this.model = model;
         int[][] grid = model.getGrid();
@@ -31,6 +40,13 @@ public class Puissance4IA {
 
     }
 
+    /**
+     * Alphabeta algorithm for the AI (Min)
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
     public int Min(int player, byte depth, byte turn, int alpha, int beta){
         int[][] grid = model.getGrid();
         if (depth == 0 || model.checkVictory(grid) != 0 || turn >= 41){
@@ -54,6 +70,13 @@ public class Puissance4IA {
         return bestScore;
     }
 
+    /**
+     * Alphabeta algorithm for the AI (Max)
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
     public int Max(int player, byte depth, byte turn, int alpha, int beta){
         int[][] grid = model.getGrid();
         if (depth == 0 || model.checkVictory(grid) != 0 || turn == 42){
@@ -76,6 +99,12 @@ public class Puissance4IA {
         return bestScore;
     }
 
+    /**
+     * Evaluate the grid
+     * @param grid
+     * @param player
+     * @return score of the grid
+     */
     public int evaluate(int[][] grid, int player){
         int score = 0;
         int opponent = player % 2 + 1;
@@ -92,6 +121,11 @@ public class Puissance4IA {
         return score;
     }
 
+    /**
+     * Check if a given player can win in the next turn
+     * @param player
+     * @return
+     */
     public int checkForThreat(int player) {
         int[][] grid = model.getGrid();
         int threat = 0;
@@ -108,6 +142,15 @@ public class Puissance4IA {
         return threat;
     }
 
+    /**
+     * Check if a block os 4 is complete except for one empty token
+     * @param col
+     * @param row
+     * @param deltaX
+     * @param deltaY
+     * @param player
+     * @return
+     */
     private int checkCompleteInDirection(int col, int row, int deltaX, int deltaY, int player) {
         int[][] grid = model.getGrid();
         ArrayList<Integer> subArray = new ArrayList<>();
