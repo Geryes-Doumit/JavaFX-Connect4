@@ -333,7 +333,7 @@ public class Puissance4Controller {
         int[][] winningTokens = model.getWinningTokens();
         for (int i = 0; i<4; i++){
             circles[winningTokens[i][0]][5 - winningTokens[i][1]].setStroke(Color.web("#768bad"));
-            circles[winningTokens[i][0]][5 - winningTokens[i][1]].setStrokeWidth(4);
+            circles[winningTokens[i][0]][5 - winningTokens[i][1]].setStrokeWidth(5);
         }
     }
 }

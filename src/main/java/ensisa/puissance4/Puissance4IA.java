@@ -6,34 +6,48 @@ import java.util.List;
 
 public class Puissance4IA {
     public Puissance4Model model;
+
+    /**
+     * Alphabeta algorithm for the AI
+     * @param model
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
     public int AIMove(Puissance4Model model, int player, byte depth, byte turn){
         this.model = model;
         int[][] grid = model.getGrid();
         List<Integer> possibleMoves = model.getPossibleMoves(grid);
 
-        /*
-        Random random = new Random();
-        return possibleMoves.get(random.nextInt(possibleMoves.size()));*/
-
         int bestMove = possibleMoves.get(0);
         int bestScore = Integer.MIN_VALUE;
-
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
 
         for (int move : possibleMoves){
             model.makeMove(move, player);
-            int score = Min(player, (byte)(depth - 1), turn);
+            int score = Min(player, (byte)(depth - 1), turn, alpha, beta);
             model.undoMove(move);
             if (bestScore < score){
                 bestScore = score;
                 bestMove = move;
             }
+            alpha = Math.max(alpha, bestScore);
         }
         return bestMove;
 
 
     }
 
-    public int Min(int player, byte depth, byte turn){
+    /**
+     * Alphabeta algorithm for the AI (Min)
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
+    public int Min(int player, byte depth, byte turn, int alpha, int beta){
         int[][] grid = model.getGrid();
         if (depth == 0 || model.checkVictory(grid) != 0 || turn >= 41){
             return evaluate(grid, player);
@@ -45,16 +59,25 @@ public class Puissance4IA {
         int opponent = player % 2 + 1;
         for (int move : possibleMoves){
             model.makeMove(move, opponent);
-            int score = Max(player, (byte)(depth - 1), turn);
+            int score = Max(player, (byte)(depth - 1), turn, alpha, beta);
+            bestScore = Math.min(bestScore, score);
             model.undoMove(move);
-            if (bestScore >= score){
-                bestScore = score;
+            if (bestScore <= alpha){
+                return bestScore;
             }
+            beta = Math.min(beta, bestScore);
         }
         return bestScore;
     }
 
-    public int Max(int player, byte depth, byte turn){
+    /**
+     * Alphabeta algorithm for the AI (Max)
+     * @param player
+     * @param depth
+     * @param turn
+     * @return
+     */
+    public int Max(int player, byte depth, byte turn, int alpha, int beta){
         int[][] grid = model.getGrid();
         if (depth == 0 || model.checkVictory(grid) != 0 || turn == 42){
             return evaluate(grid, player);
@@ -65,15 +88,23 @@ public class Puissance4IA {
         int bestScore = Integer.MIN_VALUE;
         for (int move : possibleMoves){
             model.makeMove(move, player);
-            int score = Min(player, (byte)(depth - 1), turn);
+            int score = Min(player, (byte)(depth - 1), turn, alpha, beta);
+            bestScore = Math.max(bestScore, score);
             model.undoMove(move);
-            if (score >= bestScore){
-                bestScore = score;
+            if (bestScore >= beta){
+                return bestScore;
             }
+            alpha = Math.max(alpha, bestScore);
         }
         return bestScore;
     }
 
+    /**
+     * Evaluate the grid
+     * @param grid
+     * @param player
+     * @return score of the grid
+     */
     public int evaluate(int[][] grid, int player){
         int score = 0;
         int opponent = player % 2 + 1;
@@ -90,6 +121,11 @@ public class Puissance4IA {
         return score;
     }
 
+    /**
+     * Check if a given player can win in the next turn
+     * @param player
+     * @return
+     */
     public int checkForThreat(int player) {
         int[][] grid = model.getGrid();
         int threat = 0;
@@ -106,6 +142,15 @@ public class Puissance4IA {
         return threat;
     }
 
+    /**
+     * Check if a block os 4 is complete except for one empty token
+     * @param col
+     * @param row
+     * @param deltaX
+     * @param deltaY
+     * @param player
+     * @return
+     */
     private int checkCompleteInDirection(int col, int row, int deltaX, int deltaY, int player) {
         int[][] grid = model.getGrid();
         ArrayList<Integer> subArray = new ArrayList<>();
