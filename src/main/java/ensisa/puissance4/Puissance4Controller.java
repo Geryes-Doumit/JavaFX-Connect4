@@ -60,7 +60,7 @@ public class Puissance4Controller {
             }
 
             animateToken(column, player); 
-            // animate and update continues the game when the animation ends
+            // animates the token and continues the game when the animation ends
             
         }
     }
@@ -73,10 +73,8 @@ public class Puissance4Controller {
         int column = IA.AIMove(model, player, (byte)6, model.getTurn());
         model.makeMove(column, player);
 
-        // printGrid();
-
         animateToken(column, player); 
-        // animate and update continues the game when the animation ends
+        // animate the token and continues the game when the animation ends
     }
 
     @FXML
