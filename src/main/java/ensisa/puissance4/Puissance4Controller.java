@@ -12,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-// import Node class from javafx
 
 
 public class Puissance4Controller {
@@ -28,6 +27,8 @@ public class Puissance4Controller {
 
     private Puissance4IA IA = new Puissance4IA();
 
+
+    @FXML private Button newGameButton;
     @FXML private MenuButton gamemodeButton;
     @FXML private MenuItem playerVsPlayer;
     @FXML private MenuItem playerVsAI;
@@ -39,6 +40,7 @@ public class Puissance4Controller {
     @FXML
     private Label label;
 
+    // Update the label with information to give to the player
     public void updateLabel(String text, boolean isEnd) {
         label.setText(text);
         if(isEnd){
@@ -49,56 +51,33 @@ public class Puissance4Controller {
         }
     }
 
+    // Switch from player 1 to player 2 and vice versa
+    public void switchPlayer() {
+        player = player % 2 + 1;
+    }
+
+    // Called when a button or a circle is clicked
     public void humanTurn(int column) {
         if(playing){
             int move = model.makeMove(column, player); // update the grid in the model
 
             if (move == -1) {
-                // System.out.println("Move not allowed");
                 updateLabel("Move not allowed !", true);
                 return;
             }
 
-            animateToken(column, player); 
             // animates the token and continues the game when the animation ends
-            
+            animateToken(column, player);
         }
     }
 
-    public void switchPlayer() {
-        player = player % 2 + 1;
-    }
-
+    // Called when the AI has to play
     public void AITurn() {
         int column = IA.AIMove(model, player, (byte)6, model.getTurn());
         model.makeMove(column, player);
 
-        animateToken(column, player); 
-        // animate the token and continues the game when the animation ends
-    }
-
-    @FXML
-    public void playerVsAIMenuClick() {
-        boolean oldState = againstAI;
-        againstAI = true;
-        gamemodeButton.setText("Player vs AI");
-        label.setText("Player vs AI.");
-
-        if (playing && !oldState) {
-            newGameButtonClicked();
-        }
-    }
-
-    @FXML
-    public void playerVsPlayerMenuClick() {
-        boolean oldState = againstAI;
-        againstAI = false;
-        gamemodeButton.setText("Player vs Player");
-        label.setText("Player vs Player.");
-
-        if (playing && oldState) {
-            newGameButtonClicked();
-        }
+        // animates the token and continues the game when the animation ends
+        animateToken(column, player);
     }
 
     public void animateToken(int column, int player) {
@@ -124,7 +103,6 @@ public class Puissance4Controller {
         // set Halignment and Valignment
         GridPane.setHalignment(circle, javafx.geometry.HPos.CENTER);
         GridPane.setValignment(circle, javafx.geometry.VPos.CENTER);
-
 
         grid.getChildren().add(circle);
 
@@ -161,6 +139,7 @@ public class Puissance4Controller {
         });
     }
 
+    // Called when the view is initialized, used for a new game
     public void initalizeView() {
         updateLabel("Player" + (!againstAI ? " "+player : "") + "'s turn", false);
         gamemodeButton.setText("Player vs " + (againstAI ? "AI" : "Player"));
@@ -225,89 +204,7 @@ public class Puissance4Controller {
         }
     }
 
-    public void stopCircleHoverEffects() {
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++)
-                circles[i][j].setOnMouseEntered(null);
-        }
-    }
-
-    private void dimBottomCircle(int column) {
-        for (int i = 5; i >= 0; i--) {
-            if (circles[column][i].getFill() == emptyColor) {
-                circles[column][i].setFill(dimColor);
-                break;
-            }
-        }
-    }
-
-    private void undimBottomCircle(int column) {
-        for (int i = 5; i >= 0; i--) {
-            if (circles[column][i].getFill() == dimColor) {
-                circles[column][i].setFill(emptyColor);
-                break;
-            }
-        }
-    }
-
-    @FXML
-    private Button newGameButton;
-
-    @FXML
-    private void newGameButtonClicked() {
-        model.initialiseGrid();
-        grid.getChildren().clear();
-        if (againstAI)
-            player = selectPlayer();
-        else
-            player = 1;
-        model.setTurn((byte)0);
-
-        playing = true;
-        initalizeView();
-
-        if (player == 2 && againstAI) {
-            AITurn();
-        }
-    }
-
-    private int selectPlayer() {
-        return (int)(Math.random() * 2) + 1;
-    }
-
-    public void checkGameStatus() {
-        if(model.checkVictory(model.getGrid()) != 0){
-            // System.out.println("Player " + model.checkVictory(model.getGrid()) + " won!");
-            if (!againstAI)
-                updateLabel("Player " + model.checkVictory(model.getGrid()) + " wins!", true);
-            else {
-                if (model.checkVictory(model.getGrid()) == 1)
-                    updateLabel("Player wins!", true);
-                else
-                    updateLabel("AI wins!", true);
-            }
-            playing = false;
-            stopCircleHoverEffects();
-        }
-        else if(model.getTurn() >= 41){
-            // System.out.println("Draw!");
-            updateLabel("Draw!", true);
-            playing = false;
-        }
-    }
-
-    public void printGrid(){
-        int[][] modelGrid = model.getGrid();
-        for (int i = 0; i<6; i++){
-            System.out.print("|");
-            for (int j = 0; j<7; j++){
-                System.out.print(modelGrid[j][5-i] + "|" );
-            }
-            System.out.println();
-        }
-        System.out.println("-------");
-    }
-
+    // used to update the view after a move
     public void updateView() {
         int[][] modelGrid = model.getGrid();
         for (int i = 0; i<6; i++){
@@ -320,5 +217,113 @@ public class Puissance4Controller {
                 }
             }
         }
+    }
+
+    @FXML // Handles the click on the menu button
+    public void playerVsAIMenuClick() {
+        boolean oldState = againstAI;
+        againstAI = true;
+        gamemodeButton.setText("Player vs AI");
+        label.setText("Player vs AI.");
+
+        if (playing && !oldState) {
+            newGameButtonClicked();
+        }
+    }
+
+    @FXML // Handles the click on the menu button
+    public void playerVsPlayerMenuClick() {
+        boolean oldState = againstAI;
+        againstAI = false;
+        gamemodeButton.setText("Player vs Player");
+        label.setText("Player vs Player.");
+
+        if (playing && oldState) {
+            newGameButtonClicked();
+        }
+    }
+
+    // stops the hover effect on the circles, used when the game ends
+    public void stopCircleHoverEffects() {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++)
+                circles[i][j].setOnMouseEntered(null);
+        }
+    }
+
+    // dim the bottom circle of a column
+    private void dimBottomCircle(int column) {
+        for (int i = 5; i >= 0; i--) {
+            if (circles[column][i].getFill() == emptyColor) {
+                circles[column][i].setFill(dimColor);
+                break;
+            }
+        }
+    }
+
+    // undim the bottom circle of a column
+    private void undimBottomCircle(int column) {
+        for (int i = 5; i >= 0; i--) {
+            if (circles[column][i].getFill() == dimColor) {
+                circles[column][i].setFill(emptyColor);
+                break;
+            }
+        }
+    }
+
+    @FXML // Handles the click on the new game button
+    private void newGameButtonClicked() {
+        model.initialiseGrid();
+        grid.getChildren().clear();
+        if (againstAI)
+            player = selectPlayer(); // select at random who starts, AI or player
+        else
+            player = 1;
+        model.setTurn((byte)0);
+
+        playing = true;
+        initalizeView();
+
+        if (player == 2 && againstAI) {
+            AITurn();
+        }
+    }
+
+    // select at random who starts, AI or player
+    private int selectPlayer() {
+        return (int)(Math.random() * 2) + 1;
+    }
+
+    // used to check if the game is over
+    public void checkGameStatus() {
+        if(model.checkVictory(model.getGrid()) != 0){
+            if (!againstAI)
+                updateLabel("Player " + model.checkVictory(model.getGrid()) + " wins!", true);
+            else {
+                if (model.checkVictory(model.getGrid()) == 1)
+                    updateLabel("Player wins!", true);
+                else
+                    updateLabel("AI wins!", true);
+            }
+            playing = false;
+            stopCircleHoverEffects();
+        }
+        else if(model.getTurn() >= 41){
+            updateLabel("Draw!", true);
+            playing = false;
+        }
+    }
+
+    // used for debugging
+    public void printGrid(){
+        int[][] modelGrid = model.getGrid();
+        for (int i = 0; i<6; i++){
+            System.out.print("|");
+            for (int j = 0; j<7; j++){
+                System.out.print(modelGrid[j][5-i] + "|" );
+            }
+            System.out.println();
+        }
+        System.out.println("-------");
     }
 }
