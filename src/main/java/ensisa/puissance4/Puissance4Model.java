@@ -9,7 +9,6 @@ public class Puissance4Model {
     public int[][] getGrid() {
         return grid;
     }
-    //public int player = 1;
 
     private byte turn = 0;
     public byte getTurn() {
