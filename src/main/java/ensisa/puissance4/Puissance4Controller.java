@@ -1,5 +1,7 @@
 package ensisa.puissance4;
 
+import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
+// import Node class from javafx
+
 
 public class Puissance4Controller {
     private static Color dimColor = Color.rgb(117, 117, 117);
@@ -46,7 +51,7 @@ public class Puissance4Controller {
 
     public void humanTurn(int column) {
         if(playing){
-            int move = model.makeMove(column, player);
+            int move = model.makeMove(column, player); // update the grid in the model
 
             if (move == -1) {
                 // System.out.println("Move not allowed");
@@ -54,27 +59,14 @@ public class Puissance4Controller {
                 return;
             }
 
-            // printGrid();
-
-            updateView();
-            checkGameStatus();
-            if (!playing){
-                return;
-            }
-
-            model.setTurn((byte)(model.getTurn() + 1));
-            player = player % 2 + 1;
-
-            if(againstAI)
-            {
-                updateLabel("AI's turn", false);
-                AITurn();
-            }
-            else
-            {
-                updateLabel("Player " + player + "'s turn", false);
-            }
+            animateToken(column, player); 
+            // animate and update continues the game when the animation ends
+            
         }
+    }
+
+    public void switchPlayer() {
+        player = player % 2 + 1;
     }
 
     public void AITurn() {
@@ -83,15 +75,8 @@ public class Puissance4Controller {
 
         // printGrid();
 
-        updateView();
-        checkGameStatus();
-        if (!playing){
-            return;
-        }
-
-        model.setTurn((byte)(model.getTurn() + 1));
-        player = player % 2 + 1;
-        updateLabel("Player's turn", false);
+        animateToken(column, player); 
+        // animate and update continues the game when the animation ends
     }
 
     @FXML
@@ -99,7 +84,7 @@ public class Puissance4Controller {
         boolean oldState = againstAI;
         againstAI = true;
         gamemodeButton.setText("Player vs AI");
-        label.setText("Player vs AI selected.");
+        label.setText("Player vs AI.");
 
         if (playing && !oldState) {
             newGameButtonClicked();
@@ -111,11 +96,71 @@ public class Puissance4Controller {
         boolean oldState = againstAI;
         againstAI = false;
         gamemodeButton.setText("Player vs Player");
-        label.setText("Player vs Player selected.");
+        label.setText("Player vs Player.");
 
         if (playing && oldState) {
             newGameButtonClicked();
         }
+    }
+
+    public void animateToken(int column, int player) {
+        // wait for the animation to finish
+        playing = false;
+
+        // calculate pane width and height
+        int paneWidth = (int) grid.getWidth()/7;
+        int paneHeight = (int) grid.getHeight()/6;
+
+        Circle circle = new Circle(40, player == 1 ? redColor : yellowColor);
+        double centerX = (column * paneWidth);
+        double centerY = 500;
+        for (int i = 5; i >= 0; i--) {
+            if (circles[column][i].getFill() == emptyColor 
+                || circles[column][i].getFill() == dimColor) {
+                centerY = circles[column][i].getCenterY() - 180 - i*15;
+                break;
+            }
+        }
+        circle.setCenterX(0);
+        circle.setCenterY(0);
+        // set Halignment and Valignment
+        GridPane.setHalignment(circle, javafx.geometry.HPos.CENTER);
+        GridPane.setValignment(circle, javafx.geometry.VPos.CENTER);
+
+
+        grid.getChildren().add(circle);
+
+        TranslateTransition transition = new TranslateTransition();
+        transition.setDuration(Duration.seconds(0.5));
+        transition.setNode(circle);
+        transition.setFromX(centerX);
+        transition.setToX(centerX);
+        transition.setFromY(paneHeight - paneHeight/2);
+        transition.setToY(centerY);
+        transition.play();
+
+        transition.setOnFinished(e -> {
+            playing = true;
+            new PauseTransition(Duration.seconds(0.5)).play();
+            grid.getChildren().remove(circle);
+            updateView();
+            checkGameStatus();
+
+            if (!playing) return;
+
+            model.setTurn((byte)(model.getTurn() + 1));
+            switchPlayer();
+
+            if(againstAI && this.player == 2)
+            {
+                updateLabel("Player 2's turn (AI)", false);
+                AITurn();
+            }
+            else
+            {
+                updateLabel("Player " + this.player + "'s turn", false);
+            }
+        });
     }
 
     public void initalizeView() {
@@ -130,7 +175,7 @@ public class Puissance4Controller {
         double gridWidth = cols * (2 * radius + spacing);
         double gridHeight = rows * (2 * radius + spacing);
 
-        double startX = (800 - gridWidth) / 2 + radius;
+        double startX = (700 - gridWidth) / 2 + radius;
         double startY = (700 - gridHeight) / 2 + radius + buttonHeight + 10; 
 
         for (int i = 0; i < rows + 1; i++) {
@@ -179,6 +224,13 @@ public class Puissance4Controller {
                     circles[j][i-1] = circle;
                 }
             }
+        }
+    }
+
+    public void stopCircleHoverEffects() {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++)
+                circles[i][j].setOnMouseEntered(null);
         }
     }
 
@@ -237,6 +289,7 @@ public class Puissance4Controller {
                     updateLabel("AI wins!", true);
             }
             playing = false;
+            stopCircleHoverEffects();
         }
         else if(model.getTurn() >= 41){
             // System.out.println("Draw!");
