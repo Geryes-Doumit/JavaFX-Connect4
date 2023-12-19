@@ -11,7 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Puissance4Controller {
-
+    private static Color dimColor = Color.rgb(117, 117, 117);
+    private static Color emptyColor = Color.rgb(182, 180, 175);
+    private static Color redColor = Color.rgb(187, 1, 11);
+    private static Color yellowColor = Color.rgb(249, 200, 14);
     private Puissance4Model model = new Puissance4Model();
     private boolean playing = false;
     private boolean againstAI = false;
@@ -31,8 +34,14 @@ public class Puissance4Controller {
     @FXML
     private Label label;
 
-    public void updateLabel(String text) {
+    public void updateLabel(String text, boolean isEnd) {
         label.setText(text);
+        if(isEnd){
+            label.setTextFill(Color.rgb(208, 89, 97));
+        }
+        else {
+            label.setTextFill(Color.WHITE);
+        }
     }
 
     public void humanTurn(int column) {
@@ -41,7 +50,7 @@ public class Puissance4Controller {
 
             if (move == -1) {
                 // System.out.println("Move not allowed");
-                updateLabel("Move not allowed !");
+                updateLabel("Move not allowed !", true);
                 return;
             }
 
@@ -58,12 +67,12 @@ public class Puissance4Controller {
 
             if(againstAI)
             {
-                updateLabel("AI's turn");
+                updateLabel("AI's turn", false);
                 AITurn();
             }
             else
             {
-                updateLabel("Player " + player + "'s turn");
+                updateLabel("Player " + player + "'s turn", false);
             }
         }
     }
@@ -82,7 +91,7 @@ public class Puissance4Controller {
 
         model.setTurn((byte)(model.getTurn() + 1));
         player = player % 2 + 1;
-        updateLabel("Player's turn");
+        updateLabel("Player's turn", false);
     }
 
     @FXML
@@ -110,7 +119,7 @@ public class Puissance4Controller {
     }
 
     public void initalizeView() {
-        updateLabel("Player" + (!againstAI ? " "+player : "") + "'s turn");
+        updateLabel("Player" + (!againstAI ? " "+player : "") + "'s turn", false);
         gamemodeButton.setText("Player vs " + (againstAI ? "AI" : "Player"));
         final int rows = 6;
         final int cols = 7;
@@ -150,7 +159,7 @@ public class Puissance4Controller {
                     grid.add(button, j, i);
                 }
                 else {
-                    Circle circle = new Circle(radius, Color.WHITE);
+                    Circle circle = new Circle(radius, emptyColor);
                     double centerX = startX + (j * (2 * radius + spacing));
                     double centerY = startY + (i * (2 * radius + spacing));
                     circle.setCenterX(centerX);
@@ -175,8 +184,8 @@ public class Puissance4Controller {
 
     private void dimBottomCircle(int column) {
         for (int i = 5; i >= 0; i--) {
-            if (circles[column][i].getFill() == Color.WHITE) {
-                circles[column][i].setFill(Color.LIGHTGRAY);
+            if (circles[column][i].getFill() == emptyColor) {
+                circles[column][i].setFill(dimColor);
                 break;
             }
         }
@@ -184,8 +193,8 @@ public class Puissance4Controller {
 
     private void undimBottomCircle(int column) {
         for (int i = 5; i >= 0; i--) {
-            if (circles[column][i].getFill() == Color.LIGHTGRAY) {
-                circles[column][i].setFill(Color.WHITE);
+            if (circles[column][i].getFill() == dimColor) {
+                circles[column][i].setFill(emptyColor);
                 break;
             }
         }
@@ -220,18 +229,18 @@ public class Puissance4Controller {
         if(model.checkVictory(model.getGrid()) != 0){
             // System.out.println("Player " + model.checkVictory(model.getGrid()) + " won!");
             if (!againstAI)
-                updateLabel("Player " + model.checkVictory(model.getGrid()) + " wins!");
+                updateLabel("Player " + model.checkVictory(model.getGrid()) + " wins!", true);
             else {
                 if (model.checkVictory(model.getGrid()) == 1)
-                    updateLabel("Player wins!");
+                    updateLabel("Player wins!", true);
                 else
-                    updateLabel("AI wins!");
+                    updateLabel("AI wins!", true);
             }
             playing = false;
         }
         else if(model.getTurn() >= 41){
             // System.out.println("Draw!");
-            updateLabel("Draw!");
+            updateLabel("Draw!", true);
             playing = false;
         }
     }
@@ -253,10 +262,10 @@ public class Puissance4Controller {
         for (int i = 0; i<6; i++){
             for (int j = 0; j<7; j++){
                 if(modelGrid[j][i] == 1){
-                    circles[j][5-i].setFill(Color.RED);
+                    circles[j][5-i].setFill(redColor);
                 }
                 else if(modelGrid[j][i] == 2){
-                    circles[j][5-i].setFill(Color.YELLOW);
+                    circles[j][5-i].setFill(yellowColor);
                 }
             }
         }

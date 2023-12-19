@@ -1,5 +1,5 @@
 .button-modern {
-    -fx-background-color: #64bb88;
+    -fx-background-color: #768bad;
     -fx-text-fill: white;
     -fx-fill: white;
     -fx-font-size: 16px;
@@ -8,6 +8,19 @@
 }
 
 .button-modern:hover {
-    -fx-background-color: #539b71;
+    -fx-background-color: #4e5e78;
     -fx-cursor: hand;
+}
+
+.button-modern .label{
+    -fx-text-fill: white;
+}
+
+.button-modern .label:hover {
+    -fx-background-color: #4e5e78;
+    -fx-cursor: hand;
+}
+
+.button-modern .context-menu {
+    -fx-background-color: #768bad; /* Background color for the dropdown */
 }

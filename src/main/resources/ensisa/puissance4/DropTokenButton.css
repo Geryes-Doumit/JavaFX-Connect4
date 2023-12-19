@@ -1,5 +1,5 @@
 .drop-token-button {
-    -fx-background-color: #64bb88;
+    -fx-background-color: #768bad;
     -fx-font-size: 14px;
     -fx-border-radius: 30px;
     -fx-background-radius: 30px;
@@ -7,6 +7,6 @@
 }
 
 .drop-token-button:hover {
-    -fx-background-color: #539b71;
+    -fx-background-color: #4e5e78;
     -fx-cursor: hand;
 }

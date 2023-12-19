@@ -81,9 +81,9 @@ public class Puissance4IA {
         int opponent = player % 2 + 1;
         int victory = model.checkVictory(grid);
         if (victory == player){
-            score = 1000;
+            score = 1000000;
         } else if (victory == opponent){
-            score = -50;
+            score = -50000;
         }
 
         score += checkForThreat(player) * 10;
